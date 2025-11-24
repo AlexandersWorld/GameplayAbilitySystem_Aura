@@ -3,3 +3,9 @@
 
 #include "Game/AuraGameModeBase.h"
 
+#include "Player/AuraPlayerState.h"
+
+AAuraGameModeBase::AAuraGameModeBase()
+{
+	PlayerStateClass = AAuraPlayerState::StaticClass();
+}
