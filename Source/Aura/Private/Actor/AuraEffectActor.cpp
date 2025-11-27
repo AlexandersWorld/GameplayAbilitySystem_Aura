@@ -30,3 +30,11 @@ void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGam
 	}
 }
 
+void AAuraEffectActor::OnOverLap(AActor* TargetActor)
+{
+}
+
+void AAuraEffectActor::OnEndOverLap(AActor* TargetActor)
+{
+}
+
