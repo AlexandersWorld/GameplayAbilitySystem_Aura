@@ -20,33 +20,33 @@ struct FEffectProperties
 	GENERATED_BODY()
 	
 	FEffectProperties() {}
-	FEffectProperties(const UAbilitySystemComponent* AbilitySystemComponent, const AActor* SourceAvatarActor, AController* 
-		SourceAvatarController, ACharacter* SourceAvatarCharacter, FGameplayEffectContextHandle* EffectContextHandle)
-		: SourceASC(SourceASC), SourceAvatarActor(SourceAvatarActor), SourceAvatarController(SourceAvatarController),
-			SourceAvatarCharacter(SourceAvatarCharacter), EffectContextHandle(EffectContextHandle)
+	FEffectProperties(const UAbilitySystemComponent* SourceASC, const AActor* SourceAvatarActor, AController* 
+		SourceController, ACharacter* SourceAvatarCharacter, const FGameplayEffectContextHandle& EffectContextHandle)
+		: EffectContextHandle(EffectContextHandle), SourceASC(SourceASC), SourceAvatarActor(SourceAvatarActor),
+			SourceController(SourceController), SourceAvatarCharacter(SourceAvatarCharacter)
 	{
 		
 	};
 	
-	struct FGameplayEffectContextHandle* EffectContextHandle;
+	struct FGameplayEffectContextHandle EffectContextHandle;
 	
 	UPROPERTY()
 	const class UAbilitySystemComponent* SourceASC = nullptr;
 	UPROPERTY()
 	const class AActor* SourceAvatarActor = nullptr;
 	UPROPERTY()
-	class AController* SourceAvatarController = nullptr;
+	class AController* SourceController = nullptr;
 	UPROPERTY()
 	class ACharacter* SourceAvatarCharacter = nullptr;
 	
 	UPROPERTY()
 	const class UAbilitySystemComponent* TargetASC = nullptr;
 	UPROPERTY()
-	const class AActor* TargetAvatarActor = nullptr;
+	class AActor* TargetAvatarActor = nullptr;
 	UPROPERTY()
-	class AController* TargetAvatarController = nullptr;
+	class AController* TargetController = nullptr;
 	UPROPERTY()
-	class ACharacter* TargetAvatarCharacter = nullptr;
+	class ACharacter* TargetCharacter = nullptr;
 };
 	
 /**
@@ -62,7 +62,7 @@ public:
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
 	virtual  void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;	
-	void SetEffectProperties(const struct FGameplayEffectModCallbackData& Data, FEffectProperties& Props);
+	void SetEffectProperties(const struct FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
 	
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")
 	FGameplayAttributeData Health;
