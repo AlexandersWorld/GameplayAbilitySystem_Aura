@@ -3,8 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AttributeSet.h"
 #include "AbilitySystemComponent.h"
+#include "GameplayEffectExtension.h"
 #include "AuraAttributeSet.generated.h"
 
 
@@ -13,6 +13,41 @@
 	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
+
+USTRUCT()
+struct FEffectProperties
+{
+	GENERATED_BODY()
+	
+	FEffectProperties() {}
+	FEffectProperties(const UAbilitySystemComponent* SourceASC, const AActor* SourceAvatarActor, AController* 
+		SourceController, ACharacter* SourceAvatarCharacter, const FGameplayEffectContextHandle& EffectContextHandle)
+		: EffectContextHandle(EffectContextHandle), SourceASC(SourceASC), SourceAvatarActor(SourceAvatarActor),
+			SourceController(SourceController), SourceAvatarCharacter(SourceAvatarCharacter)
+	{
+		
+	};
+	
+	struct FGameplayEffectContextHandle EffectContextHandle;
+	
+	UPROPERTY()
+	const class UAbilitySystemComponent* SourceASC = nullptr;
+	UPROPERTY()
+	const class AActor* SourceAvatarActor = nullptr;
+	UPROPERTY()
+	class AController* SourceController = nullptr;
+	UPROPERTY()
+	class ACharacter* SourceAvatarCharacter = nullptr;
+	
+	UPROPERTY()
+	const class UAbilitySystemComponent* TargetASC = nullptr;
+	UPROPERTY()
+	class AActor* TargetAvatarActor = nullptr;
+	UPROPERTY()
+	class AController* TargetController = nullptr;
+	UPROPERTY()
+	class ACharacter* TargetCharacter = nullptr;
+};
 	
 /**
  * 
@@ -25,6 +60,9 @@ class AURA_API UAuraAttributeSet : public UAttributeSet
 public:
 	UAuraAttributeSet();
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual  void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
+	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;	
+	void SetEffectProperties(const struct FGameplayEffectModCallbackData& Data, FEffectProperties& Props) const;
 	
 	UPROPERTY(BlueprintReadOnly, ReplicatedUsing = OnRep_Health, Category = "Vital Attributes")
 	FGameplayAttributeData Health;
