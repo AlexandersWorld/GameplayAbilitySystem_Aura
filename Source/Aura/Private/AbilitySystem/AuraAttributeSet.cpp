@@ -9,8 +9,8 @@
 
 UAuraAttributeSet::UAuraAttributeSet()
 {
-	InitHealth(20.0f);
-	InitMana(30.0f);
+	InitHealth(30.0f);
+	InitMana(10.0f);
 	InitMaxHealth(100.0f);
 	InitMaxMana(50.0f);
 }
