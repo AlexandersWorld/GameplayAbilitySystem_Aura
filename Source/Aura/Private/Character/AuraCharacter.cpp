@@ -35,28 +35,21 @@ void AAuraCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();
 }
 
+int32 AAuraCharacter::GetPlayerLevel()
+{
+	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState);
+	
+	return AuraPlayerState->GetPlayerLevel();
+}
+
 void AAuraCharacter::InitAbilityActorInfo()
 {
 	AAuraPlayerState* AuraPlayerState = GetPlayerState<AAuraPlayerState>();
-    
-	if (!AuraPlayerState)
-	{
-		// PlayerState not available yet, try again next frame
-		UE_LOG(LogTemp, Warning, TEXT("AuraPlayerState is null in InitAbilityActorInfo"));
-		return;
-	}
-    
-	// Additional safety checks
-	if (!AuraPlayerState->GetAbilitySystemComponent() || !AuraPlayerState->GetAttributeSet())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("ASC or AttributeSet not initialized in PlayerState"));
-		return;
-	}
+	check(AuraPlayerState);
     
 	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState, this);
-	
 	Cast<UAuraAbilitySystemComponent>(AuraPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
-	
 	AbilitySystemComponent = AuraPlayerState->GetAbilitySystemComponent();
 	AttributeSet = AuraPlayerState->GetAttributeSet();
 	
@@ -67,4 +60,5 @@ void AAuraCharacter::InitAbilityActorInfo()
 			AuraHUD->InitOverlay(AuraPlayerController, AuraPlayerState, AbilitySystemComponent, AttributeSet);
 		}
 	}
+	InitializeDefaultAttributes();
 }
